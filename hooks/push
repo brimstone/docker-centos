@@ -1,0 +1,13 @@
+#!/bin/bash
+set -euo pipefail
+
+IMAGE_NAME=${1:-brimstone/centos}
+# stolen from https://medium.com/microscaling-systems/labelling-automated-builds-on-docker-hub-f3d073fb8e1
+
+for f in Dockerfile.*; do
+	v="${f##Dockerfile.}"
+	docker push "$IMAGE_NAME:$v"
+	docker push "$IMAGE_NAME:${v%.*}"
+done
+
+docker push "$IMAGE_NAME:latest"
